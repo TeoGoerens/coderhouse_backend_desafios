@@ -15,12 +15,12 @@ export default class cartManager {
     return newCart;
   }
 
-  async getCartById(id) {
+  async getCartById(cartId) {
     try {
-      const cart = await cartModel.findById(id).lean();
+      const cart = await cartModel.findById(cartId).populate("products.id");
       return cart;
     } catch {
-      return `The cart with id: ${id} was not found`;
+      return `The cart with id: ${cartId} was not found`;
     }
   }
 
@@ -54,5 +54,45 @@ export default class cartManager {
     } catch (error) {
       return `An unexpected error occured`;
     }
+  }
+
+  async deleteProductFromCart(cartId, productId) {
+    //Verify if cart exists in database
+    const cart = await cartModel.findById(cartId);
+    if (!cart) {
+      return `The cart with id ${cartId} doesn't exist`;
+    }
+
+    //Verify if product exists in the database
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return `The product with id ${productId} does not exist`;
+    }
+
+    // Delete product from the cart
+    const updatedCart = await cartModel.findByIdAndUpdate(
+      cartId,
+      { $pull: { products: { id: productId } } },
+      { new: true }
+    );
+
+    return updatedCart;
+  }
+
+  async emptyCart(cartId) {
+    //Verify if cart exists in database
+    const cart = await cartModel.findById(cartId);
+    if (!cart) {
+      return `The cart with id ${cartId} doesn't exist`;
+    }
+
+    // Empty the cart
+    const updatedCart = await cartModel.findByIdAndUpdate(
+      cartId,
+      { products: [] },
+      { new: true }
+    );
+
+    return updatedCart;
   }
 }
