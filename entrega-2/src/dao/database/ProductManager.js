@@ -3,11 +3,28 @@ import { productModel } from "../models/product.model.js";
 export default class ProductManager {
   async getProducts() {
     try {
-      const products = await productModel.find().lean();
+      const products = await productModel.paginate({}, { limit: 2, page: 1 });
       return products;
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async getProductsWithFilters(limit, page, query, toSort) {
+    const options = {
+      limit,
+      page,
+      customLabels: { docs: "payload" },
+    };
+
+    if (toSort !== "") {
+      options.sort = { price: toSort };
+    }
+
+    const queryFilter = query === "" ? {} : { category: query };
+
+    const products = await productModel.paginate(queryFilter, options);
+    return products;
   }
 
   async addProduct(

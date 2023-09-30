@@ -7,12 +7,36 @@ const myProductManager = new ProductManager();
 
 //Endpoints configuration
 router.get("/", async (req, res) => {
-  const limit = req.query.limit;
-  const products = await myProductManager.getProducts();
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 1;
+  const query = req.query.query || "";
+  const sort = req.query.sort || "";
 
-  if (limit) {
-    return res.send(products.slice(0, limit));
-  }
+  const products = await myProductManager.getProductsWithFilters(
+    limit,
+    page,
+    query,
+    sort
+  );
+
+  products.status = "success";
+
+  const prevLink =
+    products.hasPrevPage === false
+      ? null
+      : `http://localhost:8080/api/products?limit=${limit}&page=${
+          parseInt(page, 10) - 1
+        }&query=${query}&sort=${sort}`;
+  products.prevLink = prevLink;
+
+  const nextLink =
+    products.hasNextPage === false
+      ? null
+      : `http://localhost:8080/api/products?limit=${limit}&page=${
+          parseInt(page, 10) + 1
+        }&query=${query}&sort=${sort}`;
+  products.nextLink = nextLink;
+
   res.send(products);
 });
 
