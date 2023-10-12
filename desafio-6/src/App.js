@@ -67,6 +67,8 @@ app.use(
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Router import and configuration
 import productRouter from "./routes/productRouter.js";
