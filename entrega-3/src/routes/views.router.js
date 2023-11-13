@@ -9,6 +9,10 @@ const controller = new ViewController();
 //Chat routers
 router.get("/chat", controller.displayChat);
 
+//User routers
+router.get("/current", privateRoutes, controller.displayUser);
+router.get("/admin", controller.displayAdmin);
+
 //Product routers
 router.get("/", controller.displayProductsInList);
 router.get("/realtimeproducts", controller.displayProductsInRealTime);

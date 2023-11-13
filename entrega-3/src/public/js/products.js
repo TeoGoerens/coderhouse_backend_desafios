@@ -16,10 +16,9 @@ async function addToCart(productId) {
     }
 
     const result = await response.json();
-    console.log(result);
 
     // Manejar la respuesta del servidor
-    if (result._id == "65178ec626aa339d88fda281") {
+    if (result.cart._id == "65178ec626aa339d88fda281") {
       alert("Product was properly added to cart");
     } else {
       alert("It was not possible to add product to cart");

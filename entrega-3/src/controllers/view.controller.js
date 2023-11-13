@@ -30,6 +30,21 @@ export default class ViewController extends Controllers {
     res.render("chat", {});
   };
 
+  displayAdmin = (req, res, next) => {
+    res.render("admin", {});
+  };
+
+  displayUser = async (req, res, next) => {
+    const first_name = req.session.user.first_name;
+    const last_name = req.session.user.last_name;
+    const email = req.session.user.email;
+    const age = req.session.user.age;
+
+    const userDTO = { first_name, last_name, email, age };
+
+    res.render("current", { userDTO });
+  };
+
   displayProducts = async (req, res, next) => {
     const { first_name, last_name, email, age, role } = req.session.user;
 

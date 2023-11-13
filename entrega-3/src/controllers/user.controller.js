@@ -1,10 +1,7 @@
 import Controllers from "./class.controller.js";
 import UserRepository from "../persistence/daos/repository/user.repository.js";
-import passport from "passport";
-//import CartRepository from "../persistence/daos/repository/cart.repository.js";
 
 const userRepository = new UserRepository();
-//const cartRepository = new CartRepository();
 
 export default class UserController extends Controllers {
   constructor() {
