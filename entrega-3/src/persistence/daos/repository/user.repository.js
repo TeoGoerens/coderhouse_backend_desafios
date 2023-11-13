@@ -1,9 +1,8 @@
-import { cartManager } from "../factory.js";
-import { productManager } from "../factory.js";
+import { userManager } from "../factory.js";
 
-export default class CartRepository {
+export default class UserRepository {
   constructor() {
-    this.dao = cartManager;
+    this.dao = userManager;
   }
 
   async getAll() {

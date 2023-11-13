@@ -5,29 +5,31 @@ export default class ProductRepository {
     this.dao = productManager;
   }
 
-  async getProducts(limit, query, page, sort) {
+  async getProducts(limit = 10, page = 1, query = "", sort = "") {
     try {
-      const products = await this.dao.getProducts(limit, query, page, sort);
+      const products = await this.dao.getProducts(limit, page, query, sort);
 
-      products.status = "success";
+      //products.status = "success";
 
       const prevLink =
         products.hasPrevPage === false
           ? null
-          : `http://localhost:8080/api/products?limit=${limit}&page=${
+          : `http://localhost:8080/products?limit=${limit}&page=${
               products.page - 1
             }&query=${query}&sort=${sort}`;
-      products.prevLink = prevLink;
+      //products.prevLink = prevLink;
 
       const nextLink =
         products.hasNextPage === false
           ? null
-          : `http://localhost:8080/api/products?limit=${limit}&page=${
+          : `http://localhost:8080/products?limit=${limit}&page=${
               products.page + 1
             }&query=${query}&sort=${sort}`;
-      products.nextLink = nextLink;
+      //products.nextLink = nextLink;
 
-      return products;
+      const productDTO = { ...products, status: "success", prevLink, nextLink };
+
+      return productDTO;
     } catch (error) {
       console.log(error);
     }

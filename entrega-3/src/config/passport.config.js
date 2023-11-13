@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
-import { userModel } from "../dao/models/user.model.js";
+import { userModel } from "../persistence/daos/mongodb/models/user.model.js";
 import bcrypt from "bcrypt";
 
 //Dotenv import and configuration
