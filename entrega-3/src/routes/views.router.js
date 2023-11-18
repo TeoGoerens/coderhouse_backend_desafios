@@ -2,24 +2,41 @@ import { Router } from "express";
 import ViewController from "../controllers/view.controller.js";
 import privateRoutes from "../middlewares/private.routes.js";
 import publicRoutes from "../middlewares/public.routes.js";
+import userAuthorization from "../middlewares/user.authorization.js";
+import adminAuthorization from "../middlewares/admin.authorization.js";
 
 const router = Router();
 const controller = new ViewController();
 
 //Chat routers
-router.get("/chat", controller.displayChat);
+router.get("/chat", privateRoutes, userAuthorization, controller.displayChat);
 
 //User routers
 router.get("/current", privateRoutes, controller.displayUser);
-router.get("/admin", controller.displayAdmin);
+router.get(
+  "/admin",
+  privateRoutes,
+  adminAuthorization,
+  controller.displayAdmin
+);
 
 //Product routers
 router.get("/", controller.displayProductsInList);
 router.get("/realtimeproducts", controller.displayProductsInRealTime);
-router.get("/products", privateRoutes, controller.displayProducts);
+router.get(
+  "/products",
+  privateRoutes,
+  userAuthorization,
+  controller.displayProducts
+);
 
 //Cart routers
-router.get("/carts/:cid", controller.displayCart);
+router.get("/carts/:cid", privateRoutes, controller.displayCart);
+router.get(
+  "/carts/:cid/purchase",
+  privateRoutes,
+  controller.displayCartPurchased
+);
 
 //Login & Signup routers
 router.get("/login", publicRoutes, controller.displayLogin);

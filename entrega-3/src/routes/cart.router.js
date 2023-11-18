@@ -9,6 +9,7 @@ router.get("/:pid", controller.getById);
 
 router.post("/", controller.addCart);
 router.post("/:cid/product/:pid", controller.addProductToCart);
+router.post("/:cid/purchase", controller.endPurchase);
 
 router.put("/:pid", controller.update);
 router.put("/:cid/product/:pid", controller.updateProductQuantity);

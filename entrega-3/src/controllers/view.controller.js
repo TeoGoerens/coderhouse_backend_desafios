@@ -100,6 +100,10 @@ export default class ViewController extends Controllers {
     res.render("cart", { cart, totalCart, style: "cart.css" });
   };
 
+  displayCartPurchased = (req, res, next) => {
+    res.render("cartpurchased", {});
+  };
+
   displayLogin = (req, res, next) => {
     return res.render("login");
   };

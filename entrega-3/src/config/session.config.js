@@ -9,7 +9,7 @@ const sessionInit = () => {
     session({
       store: MongoStore.create({
         mongoUrl: process.env.MONGO_CONNECT,
-        ttl: 15,
+        ttl: 5000,
       }),
       secret: process.env.EXPRESS_SESSION_SECRET,
       resave: false,

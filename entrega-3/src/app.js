@@ -39,6 +39,7 @@ import productRouter from "./routes/product.router.js";
 import cartRouter from "./routes/cart.router.js";
 import userRouter from "./routes/user.router.js";
 import viewRouter from "./routes/views.router.js";
+
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api", userRouter);
