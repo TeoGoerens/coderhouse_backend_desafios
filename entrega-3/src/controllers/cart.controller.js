@@ -99,25 +99,24 @@ export default class CartController extends Controllers {
       0
     );
 
-    const user = req.session.user;
-    console.log(user);
-    //const user = await userModel.findOne({ email: req.session.user.email });
-    //const userId = req.session.user.email;
+    const userEmail = req.session.user.email;
+    const user = await userModel.findOne({ email: userEmail });
 
     const ticket = {
       code: randomCodeGenerator(),
       purchase_datetime: new Date(),
       amount: totalPurchase,
-      purchaser: "userId",
+      purchaser: user._id,
     };
 
-    //const ticketCreated = await ticketRepository.create(ticket);
+    const ticketCreated = await ticketRepository.create(ticket);
     //Devolver los productos que no pudieron ser comprados
 
     res.status(200).send({
       purchase: productsWithSufficientStock,
       rejected: productsWithNoStock,
       ticket: ticket,
+      user: user,
     });
   };
 }

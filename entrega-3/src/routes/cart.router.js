@@ -1,5 +1,6 @@
 import { Router } from "express";
 import CartController from "../controllers/cart.controller.js";
+import privateRoutes from "../middlewares/private.routes.js";
 
 const router = Router();
 const controller = new CartController();
