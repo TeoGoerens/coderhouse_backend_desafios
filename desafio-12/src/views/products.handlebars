@@ -1,0 +1,39 @@
+<h3>Bienvenido {{first_name}} {{last_name}}</h3>
+<h4>Usted tiene asignado el rol de: {{role}}</h4>
+
+<div>
+  <a href="/chat">Chat</a>
+</div>
+<div>
+  <a href="/carts/65178ec626aa339d88fda281">Cart</a>
+</div>
+<div>
+  <a href="/admin">Admin</a>
+</div>
+<div>
+  <a href="/logout">Log out</a>
+</div>
+
+<h1>Productos</h1>
+<div class="products-container">
+  {{#each simplifiedProducts}}
+    <div class="card">
+      <h2>{{this.title}}</h2>
+      <p>{{this.description}}</p>
+      <p>Precio: ${{this.price}}</p>
+      <p>Owner: {{this.owner}}</p>
+      <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+    </div>
+  {{/each}}
+</div>
+
+<div class="pagination">
+  {{#if prevLink}}
+    <a href="{{prevLink}}">Previous Page</a>
+  {{/if}}
+  {{#if nextLink}}
+    <a href="{{nextLink}}">Next Page</a>
+  {{/if}}
+</div>
+
+<script src="/js/products.js"></script>
