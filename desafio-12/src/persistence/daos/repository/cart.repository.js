@@ -38,13 +38,19 @@ export default class CartRepository {
       //Verify if cart exists in the database
       const cart = await this.dao.getById(cartId);
       if (!cart) {
-        return `The cart with id ${cartId} does not exist`;
+        return {
+          error: `The cart with id ${cartId} does not exist`,
+          status: 404,
+        };
       }
 
       //Verify if product exists in the database
       const product = await productManager.getById(productId);
       if (!product) {
-        return `The product with id ${productId} does not exist`;
+        return {
+          error: `The product with id ${productId} does not exist`,
+          status: 404,
+        };
       }
 
       //Verify if product exists in the cart
@@ -60,9 +66,12 @@ export default class CartRepository {
 
       await cart.save();
 
-      return cart;
+      return { cart, status: 200 };
     } catch (error) {
-      return `An unexpected error occured`;
+      return {
+        error: `An unexpected error occured`,
+        status: 500,
+      };
     }
   }
 

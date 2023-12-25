@@ -35,9 +35,9 @@ export default class ProductController extends Controllers {
         req.session.user.role != "admin" &&
         req.session.user.role != "premium"
       ) {
-        return res.send(
-          "Users without ADMIN or PREMIUM roles can not create products"
-        );
+        return res
+          .status(500)
+          .send("Users without ADMIN or PREMIUM roles can not create products");
       } else {
         const productToLoad = req.body;
         const userEmail = req.session.user.email;

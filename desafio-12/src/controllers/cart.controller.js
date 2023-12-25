@@ -27,9 +27,16 @@ export default class CartController extends Controllers {
       cartReference,
       productReference
     );
-    res.status(200).send({
-      cart: cartUpdated,
-    });
+
+    if (cartUpdated.status == 200) {
+      res.status(cartUpdated.status).send({
+        cart: cartUpdated.cart,
+      });
+    } else {
+      res.status(cartUpdated.status).send({
+        error: cartUpdated.error,
+      });
+    }
   };
 
   updateProductQuantity = async (req, res, next) => {
