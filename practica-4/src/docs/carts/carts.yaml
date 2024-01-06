@@ -1,0 +1,232 @@
+paths:
+  /api/carts:
+    get:
+      summary: Retrieves all carts from database
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carts have been correctly retrieved from database
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+    post:
+      summary: Creates one cart
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Cart has been correctly crated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+        "404":
+          description: Creation error
+
+  /api/carts/{cid}:
+    get:
+      summary: Retrieves one cart based on the cid parameter
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Cart has been correctly retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+    put:
+      summary: Updates one cart based on the cid parameter
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Cart"
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Cart has been correctly updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+    delete:
+      summary: Deletes one cart based on the cid parameter
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Cart has been correctly emptied
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Ends purhcase based on products' availability
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Purchase was effectively confirmed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Adds a specific product to a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: Product's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product was effectively added to cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+    put:
+      summary: Updates a specific product's quantity within a cart
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/Quantity"
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: Product's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product was effectively added to cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+    delete:
+      summary: Deletes a specific product from a cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart's id in database
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: Product's id in database
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product was effectively deleted from cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Mongo DB's autogenerated id
+        products:
+          type: Array
+          description: Products within the cart
+      example:
+        _id: ObjectId(65178ec626aa339d88fda281)
+        products: [id: 6508ef9d9d8e7d7892939b73, quantity: 12]
+  requestBodies:
+    Cart:
+      type: object
+      properties:
+        products:
+          type: Array
+          description: Products within the cart
+      example:
+        products: [id: 6508ef9d9d8e7d7892939b73, quantity: 8]
+    Quantity:
+      type: object
+      properties:
+        quantity:
+          type: Number
+          description: Desired amount of products in the cart
+      example:
+        quantity: 5
