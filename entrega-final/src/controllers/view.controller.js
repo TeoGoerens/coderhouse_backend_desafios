@@ -40,8 +40,19 @@ export default class ViewController extends Controllers {
     res.render("chat", {});
   };
 
-  displayAdmin = (req, res, next) => {
-    res.render("admin", {});
+  displayAdmin = async (req, res, next) => {
+    const usersFromDB = await userModel.find(
+      {},
+      "first_name last_name email role"
+    );
+    const users = usersFromDB.map((user) => ({
+      _id: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role,
+    }));
+    res.render("admin", { users, style: "users.css" });
   };
 
   displayUser = async (req, res, next) => {

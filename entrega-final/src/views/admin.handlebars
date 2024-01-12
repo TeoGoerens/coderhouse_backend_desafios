@@ -1,4 +1,31 @@
 <h1>A esta ruta solo puede acceder el admin</h1>
-<h3>En esta ruta se podría crear, actualizar y eliminar productos</h3>
+<h3>Lista de usuarios</h3>
 
 <a href="/logout">Log out</a>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Upgrade</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+      <tr>
+        <td>{{this.first_name}}</td>
+        <td>{{this.last_name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.role}}</td>
+        <td><button onclick="upgradeUser('{{this._id}}')">Upgrade</button></td>
+        <td><button onclick="deleteUser('{{this._id}}')">Eliminar</button></td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<script src="/js/admin.js"></script>

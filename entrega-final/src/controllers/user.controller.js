@@ -97,7 +97,7 @@ export default class UserController extends Controllers {
           message = "New user's role is PREMIUM";
           user.role = "premium";
           await user.save();
-          req.session.user.role = "premium";
+          //req.session.user.role = "premium";
         } else {
           message =
             "User must have the required documents to upgrade to PREMIUM";
@@ -108,11 +108,11 @@ export default class UserController extends Controllers {
         message = "New user's role is USER";
         user.role = "user";
         await user.save();
-        req.session.user.role = "user";
+        //req.session.user.role = "user";
         break;
     }
 
-    res.send(message);
+    res.json(message);
   };
 
   githubCallbackRedirect = (req, res, next) => {
@@ -174,6 +174,73 @@ export default class UserController extends Controllers {
         .send({ message: "These are the current active users", users });
     } catch (error) {
       res.status(404).send({ message: "Something went wrong", error });
+    }
+  };
+
+  deleteInactiveUsers = async (req, res, next) => {
+    try {
+      //Establish the condition of "inactivity"
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
+      const condition = { last_connection: { $lt: twoDaysAgo } };
+
+      //Retrieve all users under the above-defined condition
+      const usersToDelete = await userModel.find(condition);
+
+      //verify the amount of users to delete
+      if (usersToDelete.length > 0) {
+        //Inform via email deleted users about their removal from our DB
+        await Promise.all(
+          usersToDelete.map(async (user) => {
+            const mailOptions = {
+              from: "chacho@elrincondechacho.com",
+              to: user.email,
+              subject: "Eliminación de cuenta por inactividad",
+              html: `<h1>Hola ${user.first_name} ${user.last_name}</h1>
+ <h3>Nos apena mucho ver que hace tiempo no nos visitas :(</h3>
+ <p>Lamentablemente debimos eliminar tu cuenta por inactividad. Espero que vuelvas pronto a visitarnos.</p>`,
+            };
+            let mailSent = await transport.sendMail(mailOptions);
+          })
+        );
+
+        //Delete inactive users
+        const result = await userModel.deleteMany(condition);
+
+        res.status(200).send({
+          message: `${result.deletedCount} users have been successfully eliminated`,
+          usersToDelete,
+        });
+      } else {
+        res.status(200).send({
+          message: `No inactive users to delete`,
+        });
+      }
+    } catch (error) {
+      res.status(404).send({ message: "Something went wrong", error });
+    }
+  };
+
+  deleteUser = async (req, res, next) => {
+    const userIdToDelete = req.params.uid;
+    try {
+      const deletedUser = await userModel.findByIdAndDelete(userIdToDelete);
+      if (deletedUser) {
+        res.status(200).json({
+          message: `User with id ${userIdToDelete} was deleted`,
+          userIdToDelete,
+        });
+      } else {
+        res.status(200).json({
+          message: `User with id ${userIdToDelete} was not deleted`,
+          userIdToDelete,
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: `Error while deleting user with id ${userIdToDelete}`,
+        error,
+      });
     }
   };
 }

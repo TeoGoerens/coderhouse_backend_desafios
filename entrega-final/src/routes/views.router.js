@@ -2,6 +2,7 @@ import { Router } from "express";
 import ViewController from "../controllers/view.controller.js";
 import privateRoutes from "../middlewares/private.routes.js";
 import publicRoutes from "../middlewares/public.routes.js";
+import adminAuthorization from "../middlewares/admin.authorization.js";
 
 const router = Router();
 const controller = new ViewController();
@@ -14,7 +15,12 @@ router.get("/chat", privateRoutes, controller.displayChat);
 
 //User routers
 router.get("/current", privateRoutes, controller.displayUser);
-router.get("/admin", privateRoutes, controller.displayAdmin);
+router.get(
+  "/admin",
+  privateRoutes,
+  adminAuthorization,
+  controller.displayAdmin
+);
 
 //Product routers
 router.get("/", controller.displayProductsInList);

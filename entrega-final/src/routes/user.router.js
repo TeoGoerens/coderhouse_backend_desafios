@@ -41,5 +41,7 @@ router.get(
 );
 
 router.get("/", controller.getAllUsers);
+router.delete("/", controller.deleteInactiveUsers);
+router.delete("/:uid", controller.deleteUser);
 
 export default router;
